@@ -2,12 +2,25 @@
  * @Author: DX
  * @Date:   2017-07-19 09:45:09
  * @Last Modified by:   DX
- * @Last Modified time: 2017-07-20 10:00:13
+ * @Last Modified time: 2017-07-20 14:35:54
  */
 var Promise;
 (function() {
-	if (Promise) {
+	if (!Promise) {
 		'use strict';
+		/**
+		 * Object.defineProperty polyfill
+		 */
+		if(!document.getElementsByClassName){
+			var nativeFunc = Object.defineProperty ? Object.defineProperty : function () {};
+			Object.defineProperty = function (target, key, description) {
+				if(Object.prototype.isPrototypeOf(target)){
+					target[key] = description.value;
+				}else {
+					nativeFunc(target, key, description);
+				}
+			}
+		}
 		/**
 		 * The Promise's constructor
 		 * Promise 的构造函数
@@ -30,7 +43,7 @@ var Promise;
 			 * Initialize the Promise state
 			 * 初始化 Promise 对象的状态
 			 */
-			var cache = Object.create(null);
+			var cache = Object.create ? Object.create(null) : {};
 			cache.isDone = false;
 			cache.isFulfilled = false;
 			cache.isRejected = false;
@@ -50,7 +63,7 @@ var Promise;
 						value: "fulfilled",
 						writable: false,
 						configurable: false,
-						enumerable: false,
+						enumerable: false
 					});
 					Object.defineProperty(_this, "<value>", {
 						value: value,
@@ -71,13 +84,13 @@ var Promise;
 						value: "rejected",
 						writable: false,
 						configurable: false,
-						enumerable: false,
+						enumerable: false
 					});
 					Object.defineProperty(_this, "<reason>", {
 						value: reason,
 						writable: false,
 						configurable: false,
-						enumerable: false,
+						enumerable: false
 					});
 					cache.reason = reason;
 					cache.isDone = true;
@@ -101,7 +114,7 @@ var Promise;
 						value: "pending",
 						writable: false,
 						configurable: true,
-						enumerable: false,
+						enumerable: false
 					});
 				}
 			}
@@ -116,7 +129,7 @@ var Promise;
 			 */
 			this.then = function(resolved, rejected) {
 				return new Promise(function(resolve, reject) {
-					var t = setInterval(function() {
+					var t = setInterval(function () {
 						if (cache.isDone) {
 							clearInterval(t);
 							if (cache.isFulfilled) {
@@ -126,25 +139,29 @@ var Promise;
 								reject(rejected(cache.reason));
 							}
 						}
-					}, 0);
-				})
-			}
-			this.catch = function(rejected) {
+					}, 1);
+				});
+			};
+			/**
+			 * Note: In the IE8 mode and below, reserved words must not be used to be a property of 
+			 * object.
+			 * 在 IE8 及以下的浏览器中，保留字不允许用作为一个对象的属性。
+			 */
+			this["catch"] = function(rejected) {
 				return new Promise(function(resolve, reject) {
-					var t = setInterval(function() {
+					var t = setInterval(function () {
 						if (cache.isDone) {
 							clearInterval(t);
 							if (cache.isFulfilled) {
-								resolve(cache.value);
+								resolve(resolved(cache.value));
 							}
 							if (cache.isRejected) {
 								reject(rejected(cache.reason));
 							}
 						}
-					}, 0);
-				})
+					}, 1);
+				});
 			}
-
 		}
 		/**
 		 * Promise.resolve
@@ -165,7 +182,7 @@ var Promise;
 		Promise.reject = function(reason) {
 			return new Promise(function(resolve, reject) {
 				reject(reason);
-			})
+			});
 		}
 		/**
 		 * Promise.all
@@ -184,7 +201,7 @@ var Promise;
 					if (args instanceof Promise) {
 						promises.push(args[i]);
 					} else {
-						promises.push(Promise.resolve(args[i]))
+						promises.push(Promise.resolve(args[i]));
 					}
 				}
 			} else {
@@ -237,6 +254,16 @@ var Promise;
 						reject(reason);
 					});
 				}
+			});
+		}
+		/**
+		 * Support requirejs
+		 * 支持 requirejs
+		 */
+		var define;
+		if(define && require && requirejs){
+			define(function () {
+				return Promise;
 			});
 		}
 	}

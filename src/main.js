@@ -2,7 +2,7 @@
  * @Author: DX
  * @Date:   2017-07-19 09:57:59
  * @Last Modified by:   DX
- * @Last Modified time: 2017-07-20 10:03:10
+ * @Last Modified time: 2017-07-20 14:32:44
  */
 
 'use strict';
@@ -28,12 +28,17 @@ var p3 = new Promise(function (s, j) {
 		s("p3");
 	}, 1000);
 })
+p1.then(function () {
+	console.log("p1 fulfiiled");
+}, function () {
+	/* body... */
+});
 
 Promise.race([p1,p2,p3]).then(function () {
+	console.log("Promise.all");
 	console.log(arguments);
 }, function () {
 	console.log(arguments);
 });
-console.log("end");
 
 
