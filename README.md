@@ -1,7 +1,7 @@
 # Promise.js
 The ES6 Promise polyfill
 ****
-This polyfill support `IE5+` browers, and it support RequireJs.
+This polyfill supports `IE5+` browers, and it supports RequireJs.
 ### Attentions
 This polyfill has a little bit difference with the standard Promise. The standard method `.then()` and `.catch()` should be executed as a microtask, that means the callback function should be execeted when the stack is empty. But consider that the browsers, which do not support Promise, do not support microtask too, and the feature of microtask also can't be codes by JavaScript, it depends on the JavaScript engine, so this polyfill will executes `.then()` and `.catch()` as a task. Consequently, there may be some differences.
 
@@ -29,7 +29,7 @@ promise1
 promise2
 timeout
 ```
-But use this polyfill to fix those browsers which do not support Promise(Yeah, you konw I'm talking about IE...) will log:
+But use this polyfill to fixs those browsers which do not support Promise(Yeah, you konw I'm talking about IE...) will log:
 ```
 script start
 script end
