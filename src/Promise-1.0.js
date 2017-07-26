@@ -2,7 +2,7 @@
  * @Author: DX
  * @Date:   2017-07-19 09:45:09
  * @Last Modified by:   DX
- * @Last Modified time: 2017-07-20 14:35:54
+ * @Last Modified time: 2017-07-26 21:04:15
  */
 var Promise;
 (function() {
@@ -254,16 +254,6 @@ var Promise;
 						reject(reason);
 					});
 				}
-			});
-		}
-		/**
-		 * Support requirejs
-		 * 支持 requirejs
-		 */
-		var define;
-		if(define && require && requirejs){
-			define(function () {
-				return Promise;
 			});
 		}
 	}
